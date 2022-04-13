@@ -95,14 +95,19 @@ bowtie2-build RS_unigene.fasta RS_unigene.fasta
 bowtie2-build VS_unigene.fasta VS_unigene.fasta
 ```
 ## Annotation
-# (1) Identification of likely protein-coding regions in transcripts
+### (1) Identification of likely protein-coding regions in transcripts
 ```
 mv ~/s3_d4/caorui/batRNAseq/reference
 mkdir && cd Trinotate
 ransDecoder.LongOrfs -t ../Rhinolophus_cornutus_trinity/RS_unigene.fasta
 TransDecoder.Predict -t ../Rhinolophus_cornutus_trinity/RS_unigene.fasta
 ```
-# (2) Sequence homology searches
+### (2) Sequence homology searches
 ```
 ~/diamond blastx -p 10 -q ../Rhinolophus_cornutus_trinity/RS_unigene.fasta -d /s3_d3/xiuwan/reference_genome/nr.dmnd.tax.v2.0.dmnd  --max-target-seqs 1 --outfmt 6 --evalue 1e-5 -o RS_unigene.fasta.transdecoder.outfmt6
+```
+### (3) HMMER search against the Pfam database, and identify conserved domains 
+
+```
+nohup hmmscan --cpu 20 --domtblout TrinotateRS_PFAM.out /s3_d4/caorui/database/pfam/Pfam-A.hmm RS_unigene.fasta.transdecoder.pep
 ```
