@@ -115,3 +115,7 @@ nohup hmmscan --cpu 20 --domtblout TrinotateRS_PFAM.out /s3_d4/caorui/database/p
 ```
 for sample in `awk '{print $1}' ./sample.txt`; do echo $sample; ~/trinityrnaseq-v2.12.0/util/align_and_estimate_abundance.pl --seqType fq --left /s3_d4/caorui/batRNAseq/rawdata/QC/"$sample"_1.clean.fq.gz --right /s3_d4/caorui/batRNAseq/rawdata/QC/"$sample"_2.clean.fq.gz --transcripts /s3_d4/caorui/batRNAseq/reference/Rhinolophus_cornutus_trinity/RS_unigene.fasta --est_method RSEM  --aln_method bowtie2 --trinity_mode --prep_reference --output_dir "$sample".RSEM; done
 ```
+## combine the expression matrix
+```
+~/trinityrnaseq-v2.12.0/util/abundance_estimates_to_matrix.pl --est_method RSEM --out_prefix RS_Trinity_trans *genes*  --gene_trans_map ../../reference/Rhinolophus_cornutus_trinity/Trinity.fasta.gene_trans_map
+```
