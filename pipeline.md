@@ -1,7 +1,7 @@
 ## Assembly Rhinolophus_cornutus and Vespertilio_sinensis
 
 ```
-nohup ~/trinityrnaseq-v2.12.0/Trinity --seqType fq \
+~/trinityrnaseq-v2.12.0/Trinity --seqType fq \
 --left ../rawdata/QC/S8_1.clean.fq.gz,../rawdata/QC/S10_1.clean.fq.gz,../rawdata/QC/S12_1.clean.fq.gz,../rawdata/QC/S13_1.clean.fq.gz \
 --right ../rawdata/QC/S8_2.clean.fq.gz,../rawdata/QC/S10_2.clean.fq.gz,../rawdata/QC/S12_2.clean.fq.gz,../rawdata/QC/S13_2.clean.fq.gz \
 --CPU 30 --min_contig_length 150 --output Rhinolophus_cornutus_trinity --max_memory 100G
@@ -113,7 +113,12 @@ nohup hmmscan --cpu 20 --domtblout TrinotateRS_PFAM.out /s3_d4/caorui/database/p
 ```
 ## Quantify by RSEM and Bowtie2
 ```
-for sample in `awk '{print $1}' ./sample.txt`; do echo $sample; ~/trinityrnaseq-v2.12.0/util/align_and_estimate_abundance.pl --seqType fq --left /s3_d4/caorui/batRNAseq/rawdata/QC/"$sample"_1.clean.fq.gz --right /s3_d4/caorui/batRNAseq/rawdata/QC/"$sample"_2.clean.fq.gz --transcripts /s3_d4/caorui/batRNAseq/reference/Rhinolophus_cornutus_trinity/RS_unigene.fasta --est_method RSEM  --aln_method bowtie2 --trinity_mode --prep_reference --output_dir "$sample".RSEM; done
+for sample in `awk '{print $1}' ./sample.txt`; do echo $sample\
+~/trinityrnaseq-v2.12.0/util/align_and_estimate_abundance.pl --seqType fq \
+--left /s3_d4/caorui/batRNAseq/rawdata/QC/"$sample"_1.clean.fq.gz \
+--right /s3_d4/caorui/batRNAseq/rawdata/QC/"$sample"_2.clean.fq.gz \
+--transcripts /s3_d4/caorui/batRNAseq/reference/Rhinolophus_cornutus_trinity/RS_unigene.fasta \
+--est_method RSEM  --aln_method bowtie2 --trinity_mode --prep_reference --output_dir "$sample".RSEM; done
 ```
 ## combine the expression matrix
 ```
