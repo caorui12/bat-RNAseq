@@ -84,16 +84,11 @@ Stats based on ALL transcript contigs:
 	Total assembled bases: 105471994
 ```
 
-(3) remove redundant 
+(3) use cd-hit to remove redundance, set  identity threshold of 95%
 ```
-~/trinityrnaseq-v2.12.0/util/misc/get_longest_isoform_seq_per_trinity_gene.pl Trinity.fasta >VS_unigene.fasta
-~/trinityrnaseq-v2.12.0/util/misc/get_longest_isoform_seq_per_trinity_gene.pl Trinity.fasta >RS_unigene.fasta
+cd-hit -i Trinity.fasta -o CD-hit-RC_Trinity.fasta -c 0.95 
 ```
-(4) index and alignment by bowtiew
-```
-bowtie2-build RS_unigene.fasta RS_unigene.fasta
-bowtie2-build VS_unigene.fasta VS_unigene.fasta
-```
+
 ## Annotation
 ### (1) Identification of likely protein-coding regions in transcripts
 ```
