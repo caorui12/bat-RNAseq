@@ -94,17 +94,19 @@ cd-hit -i Trinity.fasta -o CD-hit-RC_Trinity.fasta -c 0.95
 ```
 mv ~/s3_d4/caorui/batRNAseq/reference
 mkdir && cd Trinotate
-ransDecoder.LongOrfs -t ../Rhinolophus_cornutus_trinity/RS_unigene.fasta
-TransDecoder.Predict -t ../Rhinolophus_cornutus_trinity/RS_unigene.fasta
+TransDecoder.LongOrfs -t ../../Rhinolophus_cornutus_trinity/c-0.95_RC-trintiy.fasta
+TransDecoder.Predict -t ../../Rhinolophus_cornutus_trinity/c-0.95_RC-trintiy.fasta
 ```
 ### (2) Sequence homology searches
 ```
-~/diamond blastx -p 10 -q ../Rhinolophus_cornutus_trinity/RS_unigene.fasta -d /s3_d3/xiuwan/reference_genome/nr.dmnd.tax.v2.0.dmnd  --max-target-seqs 1 --outfmt 6 --evalue 1e-5 -o RS_unigene.fasta.transdecoder.outfmt6
+diamond blastx -q ../../Rhinolophus_cornutus_trinity/c-0.95_RC-trintiy.fasta -d uniprot_sprot.pep -p 100 --max-target-seqs 1 --outfmt 6 --evalue 1e-5 -o blastx.outfmrt
+diamond blastp -q c-0.95_RC-trintiy.fasta.transdecoder.pep -d uniprot_sprot.pep -p 100 --max-target-seqs 1 --outfmt 6 --evalue 1e-5 -o transdecoder_blastx.outfmrt
 ```
 ### (3) HMMER search against the Pfam database, and identify conserved domains 
 
 ```
-nohup hmmscan --cpu 20 --domtblout TrinotateRS_PFAM.out /s3_d4/caorui/database/pfam/Pfam-A.hmm RS_unigene.fasta.transdecoder.pep
+hmmpress Pfam-A.hmm 
+hmmscan --cpu 100 --domtblout TrinotatePFAM.out Pfam-A.hmm c-0.95_RC-trintiy.fasta.transdecoder.pep >pfam.log
 ```
 ## Quantify by RSEM and Bowtie2
 ```
