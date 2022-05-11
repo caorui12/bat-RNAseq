@@ -1,10 +1,16 @@
 ## Assembly Rhinolophus_cornutus and Vespertilio_sinensis
 
 ```
+### Rhinolophus_cornutus 
 ~/trinityrnaseq-v2.12.0/Trinity --seqType fq \
 --left ../rawdata/QC/S8_1.clean.fq.gz,../rawdata/QC/S10_1.clean.fq.gz,../rawdata/QC/S12_1.clean.fq.gz,../rawdata/QC/S13_1.clean.fq.gz \
 --right ../rawdata/QC/S8_2.clean.fq.gz,../rawdata/QC/S10_2.clean.fq.gz,../rawdata/QC/S12_2.clean.fq.gz,../rawdata/QC/S13_2.clean.fq.gz \
 --CPU 30 --min_contig_length 150 --output Rhinolophus_cornutus_trinity --max_memory 100G
+### Vespertilio_sinensis
+nohup ~/trinityrnaseq-v2.12.0/Trinity --seqType fq \
+--left /s3_d4/caorui/batRNAseq/rawdata/QC/S7_1.clean.fq.gz,/s3_d4/caorui/batRNAseq/rawdata/QC/S9_1.clean.fq.gz,/s3_d4/caorui/batRNAseq/rawdata/QC/S11_1.clean.fq.gz,/s3_d4/caorui/batRNAseq/rawdata/QC/JP21_041aL_1.clean.fq.gz,/s3_d4/caorui/batRNAseq/rawdata/QC/JP21_059aL_1.clean.fq.gz,/s3_d4/caorui/batRNAseq/rawdata/QC/JP21_049aR_1.clean.fq.gz \
+--right /s3_d4/caorui/batRNAseq/rawdata/QC/S7_2.clean.fq.gz,/s3_d4/caorui/batRNAseq/rawdata/QC/S9_2.clean.fq.gz,/s3_d4/caorui/batRNAseq/rawdata/QC/S11_2.clean.fq.gz,/s3_d4/caorui/batRNAseq/rawdata/QC/JP21_041aL_2.clean.fq.gz,/s3_d4/caorui/batRNAseq/rawdata/QC/JP21_059aL_2.clean.fq.gz,/s3_d4/caorui/batRNAseq/rawdata/QC/JP21_049aR_2.clean.fq.gz  \
+--CPU 200 --min_contig_length 150 --output Vespertilio_sinensis_trinity --max_memory 100G
 ```
 
 ## Check assembly quality
