@@ -100,13 +100,26 @@ TransDecoder.Predict -t ../../Rhinolophus_cornutus_trinity/c-0.95_RC-trintiy.fas
 ### (2) Sequence homology searches
 ```
 diamond blastx -q ../../Rhinolophus_cornutus_trinity/c-0.95_RC-trintiy.fasta -d uniprot_sprot.pep -p 100 --max-target-seqs 1 --outfmt 6 --evalue 1e-5 -o blastx.outfmrt
-diamond blastp -q c-0.95_RC-trintiy.fasta.transdecoder.pep -d uniprot_sprot.pep -p 100 --max-target-seqs 1 --outfmt 6 --evalue 1e-5 -o transdecoder_blastx.outfmrt
+diamond blastp -q c-0.95_RC-trintiy.fasta.transdecoder.pep -d uniprot_sprot.pep -p 100 --max-target-seqs 1 --outfmt 6 --evalue 1e-5 -o transdecoder_blastp.outfmrt
 ```
 ### (3) HMMER search against the Pfam database, and identify conserved domains 
 
 ```
 hmmpress Pfam-A.hmm 
 hmmscan --cpu 100 --domtblout TrinotatePFAM.out Pfam-A.hmm c-0.95_RC-trintiy.fasta.transdecoder.pep >pfam.log
+```
+### (4) input to the sqlite
+```
+~/trinityrnaseq-v2.12.0/util/support_scripts/get_Trinity_gene_to_trans_map.pl c-0.95_RC-trintiy.fasta >c-0.95_RC-trintiy.fasta.gene_trans_map ### prepare transcript map
+## inital the sqlite 
+~/Trinotate-Trinotate-v3.2.2/Trinotate Trinotate.sqlite init \
+--gene_trans_map ../../Rhinolophus_cornutus_trinity/c-0.95_RC-trintiy.fasta.gene_trans_map \
+--transcript_fasta ../../Rhinolophus_cornutus_trinity/c-0.95_RC-trintiy.fasta \
+--transdecoder_pep c-0.95_RC-trintiy.fasta.transdecoder.pep
+
+~/Trinotate-Trinotate-v3.2.2/Trinotate Trinotate.sqlite LOAD_pfam TrinotatePFAM.out ### load PFam
+~/Trinotate-Trinotate-v3.2.2/Trinotate Trinotate.sqlite  LOAD_swissprot_blastx blastx.outfmrt ### load blastx
+~/Trinotate-Trinotate-v3.2.2/Trinotate Trinotate.sqlite  LOAD_swissprot_blastp transdecoder_blastp.outfmrt ### load blastp
 ```
 ## Quantify by RSEM and Bowtie2
 ```
