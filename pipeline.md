@@ -94,7 +94,10 @@ Stats based on ALL transcript contigs:
 ```
 cd-hit -i Trinity.fasta -o CD-hit-RC_Trinity.fasta -c 0.95 
 ```
-
+(4) BUSCO to evaulate assembly quality 
+```
+nohup busco -i Trinity.fasta -m tran -f --offline -l ~/database/laurasiatheria_odb10 -o RC_busco -c 15
+```
 ## Annotation
 ### (1) Identification of likely protein-coding regions in transcripts
 ```
