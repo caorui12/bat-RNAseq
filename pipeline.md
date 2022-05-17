@@ -130,6 +130,10 @@ hmmscan --cpu 100 --domtblout TrinotatePFAM.out Pfam-A.hmm c-0.95_RC-trintiy.fas
 ~/Trinotate-Trinotate-v3.2.2/Trinotate Trinotate.sqlite  LOAD_swissprot_blastx blastx.outfmrt ### load blastx
 ~/Trinotate-Trinotate-v3.2.2/Trinotate Trinotate.sqlite  LOAD_swissprot_blastp transdecoder_blastp.outfmrt ### load blastp
 ```
+### (5) annotated by interprotein
+```
+~/InterProScan_5RC7/interproscan-5-RC7/interproscan.sh -i ../../Rhinolophus_cornutus_trinity/c-0.95_RC-trintiy.fasta -appl Pfam -f GFF3 -goterms   
+```
 ## Quantify by RSEM and Bowtie2
 ```
 for sample in `awk '{print $1}' ./sample.txt`; do echo $sample\
