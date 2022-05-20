@@ -132,7 +132,7 @@ hmmscan --cpu 100 --domtblout TrinotatePFAM.out Pfam-A.hmm c-0.95_RC-trintiy.fas
 ```
 ### (5) annotated by interprotein
 ```
-~/InterProScan_5RC7/interproscan-5-RC7/interproscan.sh -i ../../Rhinolophus_cornutus_trinity/c-0.95_RC-trintiy.fasta -appl Pfam -f GFF3 -goterms   
+nohup interproscan.sh -i ../../Rhinolophus_cornutus_trinity/c-0.95_RC-trintiy.fasta -appl Pfam -f GFF3 -goterms -cpu 100 -db
 ```
 ## Quantify by RSEM and Bowtie2
 ```
