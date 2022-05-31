@@ -56,43 +56,48 @@ Stats based on ALL transcript contigs:
 (2) N50 for Vespertilio_sinensis
 
 ```
-Total trinity 'genes':	197255
-Total trinity transcripts:	286637
-Percent GC: 49.55
+################################
+## Counts of transcripts, etc.
+################################
+Total trinity 'genes':	278882
+Total trinity transcripts:	395383
+Percent GC: 50.14
 
 ########################################
 Stats based on ALL transcript contigs:
 ########################################
 
-	Contig N10: 5277
-	Contig N20: 3992
-	Contig N30: 3130
-	Contig N40: 2476
-	Contig N50: 1915
+	Contig N10: 5731
+	Contig N20: 4213
+	Contig N30: 3230
+	Contig N40: 2505
+	Contig N50: 1881
 
-	Median contig length: 351
-	Average contig: 851.99
-	Total assembled bases: 244211681
+	Median contig length: 324
+	Average contig: 803.67
+	Total assembled bases: 317756635
 
 
 #####################################################
 ## Stats based on ONLY LONGEST ISOFORM per 'GENE':
 #####################################################
 
-	Contig N10: 4689
-	Contig N20: 3250
-	Contig N30: 2264
-	Contig N40: 1457
-	Contig N50: 847
+	Contig N10: 4850
+	Contig N20: 3158
+	Contig N30: 2031
+	Contig N40: 1177
+	Contig N50: 683
 
-	Median contig length: 273
-	Average contig: 534.70
-	Total assembled bases: 105471994
+	Median contig length: 266
+	Average contig: 495.38
+	Total assembled bases: 138153436
+
 ```
 
 (3) use cd-hit to remove redundance, set  identity threshold of 95%
 ```
-cd-hit -i Trinity.fasta -o CD-hit-RC_Trinity.fasta -c 0.95 
+cd-hit-est -i Trinity.fasta -o CD-hit-RC_Trinity.fasta -c 0.95 
+cd-hit-est -i Trinity.fasta -o CD-hit-VS_Trinity.fasta -c 0.95 
 ```
 (4) BUSCO to evaulate assembly quality 
 ```
