@@ -139,6 +139,10 @@ hmmscan --cpu 100 --domtblout TrinotatePFAM.out Pfam-A.hmm c-0.95_RC-trintiy.fas
 ```
 nohup interproscan.sh -i ../../Rhinolophus_cornutus_trinity/c-0.95_RC-trintiy.fasta -appl Pfam -f GFF3 -goterms -cpu 100 -dp
 ```
+### (6) annotated by eggmapper
+```
+nohup ~/eggnog-mapper/emapper.py -i CD-hit-VS_Trinity.fasta.transdecoder.pep --output VS_eggnog -m diamond --cpu 30 --override
+```
 ## Quantify by RSEM and Bowtie2
 ```
 for sample in `awk '{print $1}' ./sample.txt`; do echo $sample\
