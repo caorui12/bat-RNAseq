@@ -103,6 +103,27 @@ cd-hit-est -i Trinity.fasta -o CD-hit-VS_Trinity.fasta -c 0.95
 ```
 nohup busco -i Trinity.fasta -m tran -f --offline -l ~/database/laurasiatheria_odb10 -o RC_busco -c 15
 ```
+(5) Bowtie2 mapping 
+```
+bowtie2 --local --no-unal -x Trinity.fasta -q -1 /s3_d4/caorui/batRNAseq/rawdata/QC/S20_1.clean.fq.gz -2 /s3_d4/caorui/batRNAseq/rawdata/QC/S20_2.clean.fq.gz | samtools view -Sb - | samtools sort -o bowtie2.coordSorted.bam
+------------------------------------------------------------------------------------------------------------------------------
+Result
+22015425 (100.00%) were paired; of these:
+    715016 (3.25%) aligned concordantly 0 times
+    1995997 (9.07%) aligned concordantly exactly 1 time
+    19304412 (87.69%) aligned concordantly >1 times
+    ----
+    715016 pairs aligned concordantly 0 times; of these:
+      14608 (2.04%) aligned discordantly 1 time
+    ----
+    700408 pairs aligned 0 times concordantly or discordantly; of these:
+      1400816 mates make up the pairs; of these:
+        394376 (28.15%) aligned 0 times
+        104113 (7.43%) aligned exactly 1 time
+        902327 (64.41%) aligned >1 times
+99.10% overall alignment rate
+```
+
 ## Annotation
 ### (1) Identification of likely protein-coding regions in transcripts
 ```
