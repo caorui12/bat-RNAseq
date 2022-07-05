@@ -125,25 +125,26 @@ Result
 ```
 
 ## Annotation
-### (1) Identification of likely protein-coding regions in transcripts
+### 1. homology search
+#### (1) Identification of likely protein-coding regions in transcripts
 ```
 mv ~/s3_d4/caorui/batRNAseq/reference
 mkdir && cd Trinotate
 TransDecoder.LongOrfs -t ../../Rhinolophus_cornutus_trinity/c-0.95_RC-trintiy.fasta
 TransDecoder.Predict -t ../../Rhinolophus_cornutus_trinity/c-0.95_RC-trintiy.fasta
 ```
-### (2) Sequence homology searches
+#### (2) Sequence homology searches
 ```
 diamond blastx -q ../../Rhinolophus_cornutus_trinity/c-0.95_RC-trintiy.fasta -d uniprot_sprot.pep -p 100 --max-target-seqs 1 --outfmt 6 --evalue 1e-5 -o blastx.outfmrt
 diamond blastp -q c-0.95_RC-trintiy.fasta.transdecoder.pep -d uniprot_sprot.pep -p 100 --max-target-seqs 1 --outfmt 6 --evalue 1e-5 -o transdecoder_blastp.outfmrt
 ```
-### (3) HMMER search against the Pfam database, and identify conserved domains 
+#### (3) HMMER search against the Pfam database, and identify conserved domains 
 
 ```
 hmmpress Pfam-A.hmm 
 hmmscan --cpu 100 --domtblout TrinotatePFAM.out Pfam-A.hmm c-0.95_RC-trintiy.fasta.transdecoder.pep >pfam.log
 ```
-### (4) input to the sqlite
+#### (4) input to the sqlite
 ```
 ~/trinityrnaseq-v2.12.0/util/support_scripts/get_Trinity_gene_to_trans_map.pl c-0.95_RC-trintiy.fasta >c-0.95_RC-trintiy.fasta.gene_trans_map ### prepare transcript map
 ## inital the sqlite 
@@ -156,13 +157,21 @@ hmmscan --cpu 100 --domtblout TrinotatePFAM.out Pfam-A.hmm c-0.95_RC-trintiy.fas
 ~/Trinotate-Trinotate-v3.2.2/Trinotate Trinotate.sqlite  LOAD_swissprot_blastx blastx.outfmrt ### load blastx
 ~/Trinotate-Trinotate-v3.2.2/Trinotate Trinotate.sqlite  LOAD_swissprot_blastp transdecoder_blastp.outfmrt ### load blastp
 ```
-### (5) annotated by interprotein
+#### (5) annotated by interprotein
 ```
 nohup interproscan.sh -i ../../Rhinolophus_cornutus_trinity/c-0.95_RC-trintiy.fasta -appl Pfam -f GFF3 -goterms -cpu 100 -dp
 ```
-### (6) annotated by eggmapper
+#### (6) annotated by eggmapper
 ```
 nohup ~/eggnog-mapper/emapper.py -i CD-hit-VS_Trinity.fasta.transdecoder.pep --output VS_eggnog -m diamond --cpu 30 --override
+```
+
+### 2. orthology assignment (use mouse_pep.faa)
+```
+formatdb -i Mus_musculus.GRCm39.pep.all.fa -p T
+# -i specifies the input file
+# -p lets the program know whether the input is protein (T) or nucleotide (F)
+blastp -query /s3_d4/caorui/batRNAseq/reference/annotation/RC/c-0.95_RC-trintiy.fasta.transdecoder.pep -db Mus_musculus.GRCm39.pep.all.fa -num_threads 80 -max_target_seqs 1 -outfmt 6 -evalue 1e-5 > blastp_RC_Mus.outfmt6 
 ```
 ## Quantify by RSEM and Bowtie2
 ```
