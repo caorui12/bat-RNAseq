@@ -168,12 +168,12 @@ nohup ~/eggnog-mapper/emapper.py -i CD-hit-VS_Trinity.fasta.transdecoder.pep --o
 
 ### 2. orthology assignment (use mouse_pep.faa)
 ```
-formatdb -i Mus_musculus.GRCm39.pep.all.fa -p T
+formatdb -i Mus_musculus.GRCm39.cds.all.fa -p T
 # -i specifies the input file
 # -p lets the program know whether the input is protein (T) or nucleotide (F)
-blastp -query /s3_d4/caorui/batRNAseq/reference/annotation/RC/c-0.95_RC-trintiy.fasta.transdecoder.pep -db Mus_musculus.GRCm39.pep.all.fa -num_threads 80 -max_target_seqs 1 -outfmt 6 -evalue 1e-5 > blastp_RC_Mus.outfmt6 
+blastp -query /s3_d4/caorui/batRNAseq/reference/annotation/RC/c-0.95_RC-trintiy.fasta.transdecoder.cds -db Mus_musculus.GRCm39.cds.all.fa -num_threads 80 -max_target_seqs 1 -outfmt 6 -evalue 1e-5 > blastp_RC_Mus.outfmt6 
 formatdb -i /s3_d4/caorui/batRNAseq/reference/annotation/RC/c-0.95_RC-trintiy.fasta.transdecoder.pep -p T ## second blastp
-blastp -query Mus_musculus.GRCm39.pep.all.fa -db /s3_d4/caorui/batRNAseq/reference/annotation/RC/c-0.95_RC-trintiy.fasta.transdecoder.pep -num_threads 80 -max_target_seqs 1 -outfmt 6 -evalue 1e-5 > blastp_Mus_RC.outfmt6
+blastn -query ../Mus_musculus.GRCm39.cds.all.fa -db /s3_d4/caorui/batRNAseq/reference/annotation/RC/c-0.95_RC-trintiy.fasta.transdecoder.cds -num_threads 80 -max_target_seqs 1 -outfmt 6 -evalue 1e-5 > blastn_Mus_RC.outfmt6
 ```
 ## Quantify by RSEM and Bowtie2
 ```
