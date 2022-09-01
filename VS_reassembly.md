@@ -22,3 +22,6 @@ blastp -query ../annotation/Trinity.fasta.transdecoder.pep -db Myotis_lucifugus_
 formatdb -i ../annotation/Trinity.fasta.transdecoder.pep -p T
 blastp -query Myotis_lucifugus_TF_protein.fasta -db ../annotation/Trinity.fasta.transdecoder.pep -num_threads 80 -max_target_seqs 1 -outfmt 6 -evalue 1e-5  > blastp_TF_VS.outfmt6 
 ```
+### Then use in-house script to extract reciporal blast result
+python ../../ortholog/homo_gene_Extract.py blastp_TF_VS.outfmt6 blastp_VS_TF.outfmt6 >TF_VS.RBH
+```
