@@ -18,6 +18,8 @@ wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/147/115/GCF_000147115.1_My
 (2) reciporal blast hit
 ```
 formatdb -i GCF_000147115.1_Myoluc2.0_protein.faa -p T
+blastp -query Trinity.fasta.transdecoder.pep -db GCF_000147115.1_Myoluc2.0_protein.faa -num_threads 80 -max_target_seqs 1 -outfmt 6 -evalue 1e-5 > blastp_VS_ML.outfmt6  
+
 ```
 ## eggnog-mapper annotation 
 ### eggNOG-mapper  is a tool for functional annotation of large sets of sequences based on fast orthology assignments
