@@ -10,6 +10,16 @@ nohup ~/trinityrnaseq-v2.12.0/Trinity --seqType fq \
 TransDecoder.LongOrfs -t trintiy.fasta
 TransDecoder.Predict -t trintiy.fasta
 ```
+## map ansembly transcript to Myotis lucifugus (little brown bat)
+(1) download protein sequence 
+```
+wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/147/115/GCF_000147115.1_Myoluc2.0/GCF_000147115.1_Myoluc2.0_protein.faa.gz 
+```
+(2) reciporal blast hit
+```
+formatdb -i GCF_000147115.1_Myoluc2.0_protein.faa -p T
+
+```
 ## eggnog-mapper annotation 
 ### eggNOG-mapper  is a tool for functional annotation of large sets of sequences based on fast orthology assignments
 ```
