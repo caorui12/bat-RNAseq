@@ -5,28 +5,50 @@ nohup ~/trinityrnaseq-v2.12.0/Trinity --seqType fq \
 --right /s3_d4/caorui/batRNAseq/rawdata/QC/JP21_041aL_2.clean.fq.gz,/s3_d4/caorui/batRNAseq/rawdata/QC/JP21_037aL_2.clean.fq.gz,/s3_d4/caorui/batRNAseq/rawdata/QC/S27_2.clean.fq.gz,/s3_d4/caorui/batRNAseq/rawdata/QC/S35_2.clean.fq.gz,/s3_d4/caorui/batRNAseq/rawdata/QC/S15_2.clean.fq.gz,/s3_d4/caorui/batRNAseq/rawdata/QC/S28_2.clean.fq.gz,/s3_d4/caorui/batRNAseq/rawdata/QC/S14_2.clean.fq.gz,/s3_d4/caorui/batRNAseq/rawdata/QC/S30_2.clean.fq.gz \
 --CPU 30 --min_contig_length 150 --output Vespertilio_sinensis_trinity --max_memory 100G &
 ```
+## filter transcript based on length and cd-hit
+```
+ ~/trinityrnaseq-v2.12.0/util/misc/get_longest_isoform_seq_per_trinity_gene.pl Trinity.fasta >longest_isoform_Trinity.fasta
+~/cd-hit-v4.8.1-2019-0228/cd-hit-est -i longest_isoform_Trinity.fasta -c 0.95 -o cd-hit-c_0.95_longest_isofrom_Trinity.fasta
+```
+final retain 402385 transcript
 ## Identify ORF
 ```
-TransDecoder.LongOrfs -t trintiy.fasta
-TransDecoder.Predict -t trintiy.fasta
+TransDecoder.LongOrfs -t cd-hit-c_0.95_longest_isofrom_Trinity.fasta
+TransDecoder.Predict -t cd-hit-c_0.95_longest_isofrom_Trinity.fasta
 ```
-## map ansembly transcript to Myotis lucifugus (little brown bat)
-(1) download protein sequence 
+finally, 47278 transcript has potential ORF
+## mulitple species annotation (MSA)
+### we obtain six bat genome from 2020 nature study, identify ortholog genes for mapping. Genomes downloaded from here https://bds.mpi-cbg.de/hillerlab/Bat1KPilotProject/ 
+(1) using gffread to extract cds peptide. 
+(2) use in-house script to add species name and revise gene ID to symbol based on gff files
+(3) use in-house script to extract longest isoform
+Here show one example
 ```
-wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/000/147/115/GCF_000147115.1_Myoluc2.0/GCF_000147115.1_Myoluc2.0_protein.faa.gz 
+gffread HLmolMol2.Bat1Kannotation.gff3 -g HLmolMol2.fa -y HLmolMol2_protein.fa
+python extract_gene_ID.py HLmolMol2.Bat1Kannotation.gff3 HLmolMol2_protein.fa HLmolMol2_protein_revised.fa 
+python extract_longest_isoform.py HLmolMol2_revised_protein.fa
 ```
-(2) reciporal blast hit
+#### (2) index 
 ```
-formatdb -i GCF_000147115.1_Myoluc2.0_protein.faa -p T
-blastp -query Trinity.fasta.transdecoder.pep -db GCF_000147115.1_Myoluc2.0_protein.faa -num_threads 80 -max_target_seqs 1 -outfmt 6 -evalue 1e-5 > blastp_VS_ML.outfmt6  
-
+formatdb -i HLmyoMyo6longest.txt -p T
+formatdb -i cd-hit-c_0.95_longest_isofrom_Trinity.fasta.transdecoder.pep -p T
+```
+#### (3) reciporal blast
+```
+blastp -query cd-hit-c_0.95_longest_isofrom_Trinity.fasta.transdecoder.pep -db HLmyoMyo6longest.txt -num_threads 80 -max_target_seqs 1 -outfmt 6 -evalue 1e-5 > blastp_VS_Myo.outfmt6  
+blastp -db cd-hit-c_0.95_longest_isofrom_Trinity.fasta.transdecoder.pep -query HLmyoMyo6longest.txt -num_threads 80 -max_target_seqs 1 -outfmt 6 -evalue 1e-5 > blastp_Myo_VS.outfmt6  
+```
+#### (4) extract one-to-one ortholg gene using in house script
+```
+=
+python homo_gene_Extract.py blastp_VS_Myo.outfmt6 blastp_Myo_VS.outfmt6 > VS_Myo
 ```
 ## eggnog-mapper annotation 
 ### eggNOG-mapper  is a tool for functional annotation of large sets of sequences based on fast orthology assignments
 ```
-/home/caorui/eggnog-mapper/emapper.py -i Trinity.fasta.transdecoder.pep --output VS_eggnog -m diamond --cpu 30 --override
+/home/caorui/eggnog-mapper/emapper.py -i cd-hit-c_0.95_longest_isofrom_Trinity.fasta.transdecoder.pep --output VS_eggnog -m diamond --cpu 30 --override
 ```
-### Transcript factor annotation
+### Transcript factor annotation 
 ```
 formatdb -i Myotis_lucifugus_TF_protein.fasta -p T
 blastp -query ../annotation/Trinity.fasta.transdecoder.pep -db Myotis_lucifugus_TF_protein.fasta -num_threads 80 -max_target_seqs 1 -outfmt 6 -evalue 1e-5 > blastp_VS_TF.outfmt6 
