@@ -43,6 +43,26 @@ blastp -db cd-hit-c_0.95_longest_isofrom_Trinity.fasta.transdecoder.pep -query H
 ```
 python /s3_d4/caorui/batRNAseq/reference/ortholog/homo_gene_Extract.py blastp_VS_Myo.outfmt6 blastp_Myo_VS.outfmt6 > VS_Myo
 ```
+#### (5) finished the rest of blastp in bash script
+```
+#!/usr/bin/bash
+
+VS=cd-hit-c_0.95_longest_isofrom_Trinity.fasta.transdecoder.pep
+pip=HLpipKuh2longest.txt
+rhi=HLrhiFer5longest.txt
+rou=HLrouAeg4longest.txt
+
+blastp -query $VS -db $pip -num_threads 80 -max_target_seqs 1 -outfmt 6 -evalue 1e-5 > blastp_vs_pip.outfmt6
+blastp -db $VS -query $pip -num_threads 80 -max_target_seqs 1 -outfmt 6 -evalue 1e-5 > blastp_pip_vs.outfmt6
+python /s3_d4/caorui/batRNAseq/reference/ortholog/homo_gene_Extract.py blastp_vs_pip.outfmt6 blastp_pip_vs.outfmt6 > vs_pip_orthlog.txt
+blastp -query $VS -db $rhi -num_threads 80 -max_target_seqs 1 -outfmt 6 -evalue 1e-5 > blastp_vs_rhi.outfmt6
+blastp -db $VS -query $rhi -num_threads 80 -max_target_seqs 1 -outfmt 6 -evalue 1e-5 > blastp_rhi_vs.outfmt6
+python /s3_d4/caorui/batRNAseq/reference/ortholog/homo_gene_Extract.py blastp_vs_rhi.outfmt6 blastp_rhi_vs.outfmt6 > vs_rhi_orthlog.txt
+blastp -query $VS -db $rou -num_threads 80 -max_target_seqs 1 -outfmt 6 -evalue 1e-5 > blastp_vs_rou.outfmt6
+blastp -db $VS -query $rou -num_threads 80 -max_target_seqs 1 -outfmt 6 -evalue 1e-5 > blastp_rou_vs.outfmt6
+python /s3_d4/caorui/batRNAseq/reference/ortholog/homo_gene_Extract.py blastp_vs_rou.outfmt6 blastp_rou_vs.outfmt6 > vs_rou_orthlog.txt
+```
+#### (6) merge result
 ## eggnog-mapper annotation 
 ### eggNOG-mapper  is a tool for functional annotation of large sets of sequences based on fast orthology assignments
 ```
